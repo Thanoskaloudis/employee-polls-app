@@ -85,7 +85,7 @@ export const Login = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, backgroundColor: "#32404d", ":hover": {bgcolor: "#415466"}}}
           >
             Log In
           </Button>
