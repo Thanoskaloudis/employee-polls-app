@@ -8,6 +8,8 @@ import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import HRIcon from "../../assets/human-resources.png";
+import { useAppDispatch } from '../../store/hooks';
+import { loginAsync } from '../../features/auth/authSlice';
 import './Login.scss';
 
 function Copyright(props: any) {
@@ -24,16 +26,21 @@ function Copyright(props: any) {
 }
 
 export const Login = () => {
-
+  const dispatch = useAppDispatch();
+  
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  }
+    const username = data.get('username');
+    const password = data.get('password');
 
+    if (typeof username !== 'string' || typeof password !== 'string') {
+        return;
+    }
+
+    dispatch(loginAsync({username, password}));
+  }
+  
   return (
     <div className="login">
       <Box
@@ -54,10 +61,10 @@ export const Login = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
           />
           <TextField
