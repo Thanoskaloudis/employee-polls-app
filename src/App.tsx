@@ -52,11 +52,7 @@ function App() {
             element={<Dashboard />}
           />
           <Route
-            path="/answered"
-            element={<Poll />}
-          />
-          <Route
-            path="/polls/:question"
+            path="/add"
             element={<Poll />}
           />
         </Routes>
