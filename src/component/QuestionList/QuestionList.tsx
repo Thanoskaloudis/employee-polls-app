@@ -1,27 +1,24 @@
-import { List, ListItem, ListItemText } from '@mui/material';
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { QuestionListProps, QuestionWithAuthor } from '../../utils/models';
+import QuestionListItem from '../QuestionListItem/QuestionListItem';
+import './QuestionList.scss';
 
 export const QuestionList = ({questions}: QuestionListProps) => {
-
-  console.log(questions)
   return (
-    <div>
-      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <div className="list">
         {questions.length ? (
           questions.map(
             (question: QuestionWithAuthor, i: number) => (
-              <Fragment key={question.id}>
-                {question.id}
-              </Fragment>
+              <div key={question.id} className="list__item">
+                <QuestionListItem question={question}/>
+              </div>
             )
           )
         ) : (
-          <ListItem>
-            <ListItemText primary="No questions to see here..." />
-          </ListItem>
+          <div className="list__message">
+            <p>No Question found</p>
+          </div>
         )}
-      </List>
-    </div>
+      </div>
   );
 };

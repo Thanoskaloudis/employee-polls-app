@@ -77,6 +77,10 @@ export type QuestionListProps = {
   questions: Array<QuestionWithAuthor>,
 };
 
+export type QuestionListItemProps = {
+  question: QuestionWithAuthor,
+};
+
 export type StoreQuestionAsyncArgs = { author: string, optionOneText: string, optionTwoText: string };
 
 export type StoreAnswerArgs = { userId: string, questionId: string, answer: questionOptions };
