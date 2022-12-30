@@ -16,7 +16,19 @@ export const Dashboard = () => {
   const newQuestionFilter = (answeredQuestionIds: Array<string>) => (id: string) => !answeredQuestionIds.includes(id);
   const newQuestionIds = poll.questions.allIds.filter(newQuestionFilter(answeredQuestionIds));
 
+  const answeredQuestionFilter = (answeredQuestionIds: Array<string>) =>(id: string) => answeredQuestionIds.includes(id);
+  const doneQuestionIds = poll.questions.allIds.filter(answeredQuestionFilter(answeredQuestionIds));
+
   const newQuestionsWithAuthors = newQuestionIds.map((id: string): QuestionWithAuthor => {
+    const question: Question = poll.questions.byId[id];
+
+    return {
+        ...question,
+        authorObject: user.users.byId[question.author],
+    };
+  });
+
+  const doneQuestionsWithAuthors = doneQuestionIds.map((id: string): QuestionWithAuthor => {
     const question: Question = poll.questions.byId[id];
 
     return {
@@ -27,10 +39,18 @@ export const Dashboard = () => {
   
   return (
     <div className="dashboard">
-      <Typography variant="h4" component="div" gutterBottom sx={{textAlign: 'center'}}>
-        New Questions
-      </Typography>
-      <QuestionList questions={newQuestionsWithAuthors}/>
+      <div className="dashboard__item">
+        <Typography variant="h4" component="div" gutterBottom sx={{textAlign: 'center'}}>
+          New Questions
+        </Typography>
+        <QuestionList questions={newQuestionsWithAuthors}/>
+      </div>
+      <div className="dashboard__item">
+        <Typography variant="h4" component="div" gutterBottom sx={{textAlign: 'center'}}>
+          Done
+        </Typography>
+        <QuestionList questions={doneQuestionsWithAuthors}/>
+      </div>
     </div>
   )
 }

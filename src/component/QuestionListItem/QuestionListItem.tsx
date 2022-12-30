@@ -12,12 +12,12 @@ const QuestionListItem = ({question}: QuestionListItemProps) => {
     );
 
     return (
-        <ListItem alignItems="flex-start" button onClick={handleClick} sx={{ bgcolor: 'white', width: '25rem', height: '10rem' }}>
+        <ListItem alignItems="flex-start" button onClick={handleClick} sx={{ bgcolor: 'white', width: '28rem', height: '10rem' }}>
             <ListItemAvatar>
                 <Avatar alt={question.authorObject.name} src={question.authorObject.avatarURL || ''}/>
             </ListItemAvatar>
             <ListItemText
-                primary={`Would you rather ${question.optionOne.text} or ${question.optionTwo.text}`}
+                primary={`Would you rather ${question.optionOne.text} or ${question.optionTwo.text}?`}
                 secondary={
                     <>
                         <Typography
