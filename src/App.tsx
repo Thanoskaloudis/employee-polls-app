@@ -20,8 +20,8 @@ function App() {
 
   useEffect(()=> {
     if(auth.isAuthenticated) {
-      dispatch(getUsersAsync());
-      dispatch(getQuestionsAsync());
+        dispatch(getUsersAsync());
+        dispatch(getQuestionsAsync());
     }
 
   },[auth.isAuthenticated, dispatch])
