@@ -8,9 +8,10 @@ import { getUsersAsync } from './features/user/userSlice';
 import { getQuestionsAsync, pollSelector } from './features/poll/pollSlice';
 import { Leaderboard } from './component/Leaderboard/Leaderboard';
 import { Dashboard } from './component/Dashboard/Dashboard';
-import { Poll } from './component/Poll/Poll';
+import { NewPoll } from './component/NewPoll/NewPoll';
 import { CircularProgress } from '@mui/material';
 import './App.scss';
+import { Poll } from './component/Poll/Poll';
 
 function App() {
   const auth = useAppSelector(authSelector);
@@ -52,8 +53,12 @@ function App() {
             element={<Dashboard />}
           />
           <Route
+            path="/questions/:question"
+            element={(<Poll />)}
+          />
+          <Route
             path="/add"
-            element={<Poll />}
+            element={<NewPoll />}
           />
         </Routes>
     </div>

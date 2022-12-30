@@ -1,81 +1,90 @@
-import { Alert, Avatar, Box, Button, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, CardContent, CardMedia, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useState } from 'react'
-import { generatePath, useNavigate } from 'react-router-dom';
-import { authUserSelector } from '../../features/auth/authSlice';
-import { pollSelector, storeQuestionAsync } from '../../features/poll/pollSlice';
+import { useParams } from 'react-router';
+import { authSelector, authUserSelector } from '../../features/auth/authSlice';
+import { pollSelector, storeAnswerAsync } from '../../features/poll/pollSlice';
+import { userSelector } from '../../features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { questionOptions, Question } from '../../utils/models';
 import './Poll.scss';
 
 export const Poll = () => {
   const dispatch = useAppDispatch();
-    const authUser = useAppSelector(authUserSelector)!;
-    const poll = useAppSelector(pollSelector);
-    const [missingFields, setMissingFields] = useState(false);
-    const navigate = useNavigate();
+  const authUser = useAppSelector(authUserSelector)!;
+  const poll = useAppSelector(pollSelector);
+  const auth = useAppSelector(authSelector);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
+  let {question: id}: { question?: string | null } = useParams<"question">();
+  const question: Question | null = id ? poll.questions.byId[id] : null;
 
-        const optionOneText = data.get('optionOneText');
-        const optionTwoText = data.get('optionTwoText');
+  const [value, setValue] = useState('');
 
-        if (!(optionOneText && optionTwoText)) {
-            setMissingFields(true);
-            return;
-        }
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
 
-        setMissingFields(false);
+      const value = data.get('value');
+      if (!value) {
+          return;
+      }
 
-        dispatch(storeQuestionAsync({
-            author: authUser.id,
-            optionOneText: optionOneText as string,
-            optionTwoText: optionTwoText as string,
-        })).then(() => {
-            navigate(generatePath('/'));
-        });
-    };
+      dispatch(storeAnswerAsync({
+          userId: auth.userId!,
+          questionId: question!.id,
+          answer: questionOptions[value as keyof typeof questionOptions]
+      }));
+  };
 
-    return (
+  const currentValue = value;
+
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(event.currentTarget.value);
+  }
+
+  return (
       <div className="poll">
         <Typography variant="h4" component="div" gutterBottom>
-          Add Question
+          Poll by
         </Typography>
         <Avatar alt={authUser!.name || undefined} src={authUser!.avatarURL || undefined} />
         <Typography sx={{fontWeight: 'bold', mb: '1rem'}}>{authUser.name}</Typography>
-        <Typography variant="subtitle1" component="div" gutterBottom>
-          Would You Rather
-        </Typography>
-        <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <Box sx={{display: 'flex'}}>
-              <Box sx={{margin: '1rem'}}>
-                  <TextField fullWidth label="Option One" name="optionOneText"/>
+        <Box sx={{display: 'flex', flexDirection: 'column'}}>
+            <CardContent sx={{flex: '1 0 auto'}}>
+                <Box component="form" onSubmit={handleSubmit}>
+                    <FormControl
+                        sx={{m: 3, display: 'flex', alignItems: 'center'}}
+                        component="fieldset"
+                        variant="standard"
+                    >
+                        <FormLabel component="legend">Would you rather...</FormLabel>
+                        <RadioGroup
+                            name="value"
+                            value={currentValue}
+                            onChange={handleValueChange}
+                        >
+                             <FormControlLabel
+                                value={questionOptions.optionOne}
+                                control={<Radio/>}
+                                label={question!.optionOne.text}
+                            />
+                            <FormControlLabel
+                                value={questionOptions.optionTwo}
+                                control={<Radio/>}
+                                label={question!.optionTwo.text}
+                            />
+                        </RadioGroup>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{width: '10rem', mt: 3}}
+                            >
+                            Submit
+                        </Button>
+                    </FormControl>
                 </Box>
-                <Box sx={{margin: '1rem'}}>
-                  <TextField fullWidth label="Option Two" name="optionTwoText"/>
-                </Box>
-              </Box>
-                <Box>
-                    {poll.status === 'failed' && (
-                      <Alert severity="error">
-                          The question was not created.
-                      </Alert>
-                    )}
-
-                    {missingFields && (
-                      <Alert severity="warning">
-                          All fields are required.
-                      </Alert>
-                    )}
-                </Box>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{width: '10rem', mt: 3, mb: 2}}>
-                    Submit
-                </Button>
-            </Box>
+             </CardContent>
+        </Box>
       </div>
-    );
+  )
 }
