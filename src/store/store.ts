@@ -6,8 +6,8 @@ import pollReducer from '../features/poll/pollSlice';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    user: userReducer,
     poll: pollReducer,
+    user: userReducer,
   },
 });
 

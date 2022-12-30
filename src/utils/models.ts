@@ -73,6 +73,12 @@ export type PollState = {
   status: 'idle' | 'loading' | 'failed',
 }
 
+export type QuestionListProps = {
+  questions: Array<QuestionWithAuthor>,
+};
+
 export type StoreQuestionAsyncArgs = { author: string, optionOneText: string, optionTwoText: string };
 
 export type StoreAnswerArgs = { userId: string, questionId: string, answer: questionOptions };
+
+export type QuestionWithAuthor = Question & { authorObject: User };

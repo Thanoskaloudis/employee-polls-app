@@ -27,7 +27,7 @@ const initialState: PollState = {
         byId: {},
         allIds: [],
     },
-    status: 'idle',
+    status: 'loading',
 }
 
 export const pollSlice = createSlice({
