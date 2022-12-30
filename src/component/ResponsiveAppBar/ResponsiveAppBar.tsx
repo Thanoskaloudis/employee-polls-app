@@ -12,11 +12,15 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Badge from '@mui/icons-material/Badge';
+import { authUserSelector, logout } from '../../features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 const pages = ['Home', 'Leaderboard', 'New'];
 const settings = ['Logout'];
 
 export const ResponsiveAppBar = () => {
+  const dispatch = useAppDispatch();
+  const authUser = useAppSelector(authUserSelector);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -34,6 +38,11 @@ export const ResponsiveAppBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogOutMenu = () => {
+    dispatch(logout());
+  };
+
 
   return (
     <AppBar position="static" sx={{ bgcolor: "#32404d" }}>
@@ -128,7 +137,7 @@ export const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                {authUser && <Avatar alt={authUser!.name || undefined} src={authUser!.avatarURL || undefined} />}
               </IconButton>
             </Tooltip>
             <Menu
@@ -148,7 +157,7 @@ export const ResponsiveAppBar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={handleLogOutMenu}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
