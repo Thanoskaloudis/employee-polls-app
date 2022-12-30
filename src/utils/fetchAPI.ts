@@ -1,5 +1,6 @@
 import { users } from '../data/_DATA';
-import { AuthResponse, UsersResponse } from './models';
+import {getQuestions, saveQuestion, saveQuestionAnswer} from "../data/_DATA";
+import { AuthResponse, QuestionsResponse, UsersResponse } from './models';
 
 export function fetchUsers(): Promise<UsersResponse> {
     return new Promise((resolve) => {
@@ -25,4 +26,18 @@ export function fetchLogin(username: string, password: string): Promise<{ data: 
             return reject('User not found.');
         }, 500)
     );
+}
+
+export function fetchQuestions(): Promise<QuestionsResponse> {
+    return getQuestions();
+}
+
+// @ts-ignore
+export function storeAnswer(args): Promise<AnswerResponse> {
+    return saveQuestionAnswer(args);
+}
+
+// @ts-ignore
+export function storeQuestion(args): Promise<StoreQuestionResponse> {
+    return saveQuestion(args);
 }

@@ -8,9 +8,10 @@ import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import HRIcon from "../../assets/human-resources.png";
-import { useAppDispatch } from '../../store/hooks';
-import { loginAsync } from '../../features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { authSelector, loginAsync } from '../../features/auth/authSlice';
 import './Login.scss';
+import { Alert } from '@mui/material';
 
 function Copyright(props: any) {
   return (
@@ -26,6 +27,7 @@ function Copyright(props: any) {
 }
 
 export const Login = () => {
+  const auth = useAppSelector(authSelector)
   const dispatch = useAppDispatch();
   
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -81,6 +83,11 @@ export const Login = () => {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+          {auth.status === 'failed' && (
+            <Alert severity="warning">
+              Your Login attemp was not successful.
+            </Alert>
+          )}
           <Button
             type="submit"
             fullWidth

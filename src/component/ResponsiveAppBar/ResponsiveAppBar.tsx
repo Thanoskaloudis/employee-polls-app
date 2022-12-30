@@ -14,12 +14,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Badge from '@mui/icons-material/Badge';
 import { authUserSelector, logout } from '../../features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-
-const pages = ['Home', 'Leaderboard', 'New'];
-const settings = ['Logout'];
+import { useNavigate } from 'react-router-dom';
 
 export const ResponsiveAppBar = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const authUser = useAppSelector(authUserSelector);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -42,7 +41,6 @@ export const ResponsiveAppBar = () => {
   const handleLogOutMenu = () => {
     dispatch(logout());
   };
-
 
   return (
     <AppBar position="static" sx={{ bgcolor: "#32404d" }}>
@@ -96,11 +94,15 @@ export const ResponsiveAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem key="home" onClick={() => {navigate('/')}}>
+                  <Typography textAlign="center">HOME</Typography>
+              </MenuItem>
+              <MenuItem key="leaderboard" onClick={() => {navigate('/leaderboard')}}>
+                  <Typography textAlign="center">LEADERBOARD</Typography>
+              </MenuItem>
+              <MenuItem key="new" onClick={() => {navigate('/add')}}>
+                  <Typography textAlign="center">NEW</Typography>
+              </MenuItem>
             </Menu>
           </Box>
           <Badge sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -123,17 +125,34 @@ export const ResponsiveAppBar = () => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key='home'
+                onClick={() => {navigate('/')}}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                HOME
               </Button>
-            ))}
+              <Button
+                key='leaderboard'
+                onClick={() => {navigate('/leaderboard')}}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                LEADERBOARD
+              </Button>
+              <Button
+                key='new'
+                onClick={() => {navigate('/add')}}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                NEW
+              </Button>
           </Box>
-
+          {authUser && <Typography sx={{ mr: 2,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+            }}>{authUser.name}</Typography>}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -156,11 +175,9 @@ export const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleLogOutMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key='logout' onClick={handleLogOutMenu}>
+                  <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
-              ))}
             </Menu>
           </Box>
         </Toolbar>
