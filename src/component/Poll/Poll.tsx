@@ -1,39 +1,39 @@
-import { Avatar, Box, Button, Card, CardContent, CardMedia, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import { Avatar, Box, Button, CardContent, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useState } from 'react'
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { authSelector, authUserSelector } from '../../features/auth/authSlice';
 import { pollSelector, storeAnswerAsync } from '../../features/poll/pollSlice';
-import { userSelector } from '../../features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { questionOptions, Question } from '../../utils/models';
 import './Poll.scss';
 
 export const Poll = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const authUser = useAppSelector(authUserSelector)!;
   const poll = useAppSelector(pollSelector);
   const auth = useAppSelector(authSelector);
-
+  
   let {question: id}: { question?: string | null } = useParams<"question">();
   const question: Question | null = id ? poll.questions.byId[id] : null;
 
   const [value, setValue] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
 
-      const value = data.get('value');
-      if (!value) {
-          return;
-      }
+    const value = data.get('value');
+    if (!value) {
+        return;
+    }
 
-      dispatch(storeAnswerAsync({
-          userId: auth.userId!,
-          questionId: question!.id,
-          answer: questionOptions[value as keyof typeof questionOptions]
-      }));
-  };
+    dispatch(storeAnswerAsync({
+        userId: auth.userId!,
+        questionId: question!.id,
+        answer: questionOptions[value as keyof typeof questionOptions]
+    })).finally(() => navigate('/'));
+  };        
 
   const currentValue = value;
 

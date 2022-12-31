@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import { QuestionListProps, QuestionWithAuthor } from '../../utils/models';
 import QuestionListItem from '../QuestionListItem/QuestionListItem';
 import './QuestionList.scss';

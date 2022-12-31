@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { authSelector, loginAsync } from '../../features/auth/authSlice';
 import './Login.scss';
 import { Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props: any) {
   return (
@@ -29,6 +30,7 @@ function Copyright(props: any) {
 export const Login = () => {
   const auth = useAppSelector(authSelector)
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,7 +42,7 @@ export const Login = () => {
         return;
     }
 
-    dispatch(loginAsync({username, password}));
+    dispatch(loginAsync({username, password})).finally(() => navigate('/'));
   }
   
   return (

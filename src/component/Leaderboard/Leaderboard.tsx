@@ -1,13 +1,11 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { authUserSelector } from '../../features/auth/authSlice';
-import { leaderSelector, userSelector } from '../../features/user/userSlice';
+import { leaderSelector } from '../../features/user/userSlice';
 import { useAppSelector } from '../../store/hooks';
-import { UserWithScore } from '../../utils/models';
 import './Leaderboard.scss';
 
 export const Leaderboard = () => {
   const leaders = useAppSelector(leaderSelector);
-  const { status } = useAppSelector(userSelector);
   const authUser = useAppSelector(authUserSelector);
 
   return (
