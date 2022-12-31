@@ -28,7 +28,7 @@ function Copyright(props: any) {
 }
 
 export const Login = () => {
-  const auth = useAppSelector(authSelector)
+  const auth = useAppSelector(authSelector);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   
@@ -86,7 +86,7 @@ export const Login = () => {
             label="Remember me"
           />
           {auth.status === 'failed' && (
-            <Alert severity="warning">
+            <Alert data-testid="alert-message" severity="warning">
               Your Login attemp was not successful.
             </Alert>
           )}

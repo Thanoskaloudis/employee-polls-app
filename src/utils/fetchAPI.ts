@@ -1,5 +1,5 @@
 import { users } from '../data/_DATA';
-import {getQuestions, saveQuestion, saveQuestionAnswer} from "../data/_DATA";
+import {_getQuestions, _saveQuestion, _saveQuestionAnswer} from "../data/_DATA";
 import { AuthResponse, QuestionsResponse, UsersResponse } from './models';
 
 export function fetchUsers(): Promise<UsersResponse> {
@@ -29,15 +29,15 @@ export function fetchLogin(username: string, password: string): Promise<{ data: 
 }
 
 export function fetchQuestions(): Promise<QuestionsResponse> {
-    return getQuestions();
+    return _getQuestions();
 }
 
 // @ts-ignore
 export function storeAnswer(args): Promise<AnswerResponse> {
-    return saveQuestionAnswer(args);
+    return _saveQuestionAnswer(args);
 }
 
 // @ts-ignore
 export function storeQuestion(args): Promise<StoreQuestionResponse> {
-    return saveQuestion(args);
+    return _saveQuestion(args);
 }
