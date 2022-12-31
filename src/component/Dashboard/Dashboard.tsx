@@ -1,5 +1,5 @@
-import { Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { FormControlLabel, FormGroup, Switch, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { authUserSelector } from '../../features/auth/authSlice';
 import { getQuestionsAsync, pollSelector } from '../../features/poll/pollSlice';
 import { getUsersAsync, userSelector } from '../../features/user/userSlice';
@@ -9,6 +9,8 @@ import { QuestionList } from '../QuestionList/QuestionList';
 import './Dashboard.scss';
 
 export const Dashboard = () => {
+  const [newVisible, setNewVisible] = useState(true);
+  const [doneVisible, setDoneVisible] = useState(true);
   const dispatch = useAppDispatch();
   const authUser = useAppSelector(authUserSelector);
   const poll = useAppSelector(pollSelector);
@@ -44,6 +46,15 @@ export const Dashboard = () => {
     };
   });
 
+  const switchHandlerNew = (event: any) => {
+    setNewVisible(event.target.checked);
+  };
+
+  const switchHandlerDone = (event: any) => {
+    setDoneVisible(event.target.checked);
+  };
+
+
   console.log(newQuestionsWithAuthors, doneQuestionsWithAuthors)
   
   return (
@@ -51,14 +62,20 @@ export const Dashboard = () => {
       <div className="dashboard__item">
         <Typography variant="h4" component="div" gutterBottom sx={{textAlign: 'center'}}>
           New Questions
+          <FormGroup sx={{display: 'block'}}>
+            <FormControlLabel control={<Switch checked={newVisible} onChange={switchHandlerNew}/>} label="vissible" />
+          </FormGroup>
         </Typography>
-        <QuestionList questions={newQuestionsWithAuthors}/>
+        { newVisible && <QuestionList questions={newQuestionsWithAuthors}/>}
       </div>
       <div className="dashboard__item">
         <Typography variant="h4" component="div" gutterBottom sx={{textAlign: 'center'}}>
           Done
+          <FormGroup sx={{display: 'block'}}>
+            <FormControlLabel control={<Switch checked={doneVisible} onChange={switchHandlerDone}/>} label="vissible" />
+          </FormGroup>
         </Typography>
-        <QuestionList questions={doneQuestionsWithAuthors}/>
+        {doneVisible && <QuestionList questions={doneQuestionsWithAuthors}/>}
       </div>
     </div>
   )

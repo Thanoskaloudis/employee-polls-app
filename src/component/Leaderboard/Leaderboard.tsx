@@ -1,12 +1,20 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { authUserSelector } from '../../features/auth/authSlice';
-import { leaderSelector } from '../../features/user/userSlice';
-import { useAppSelector } from '../../store/hooks';
+import { getQuestionsAsync } from '../../features/poll/pollSlice';
+import { getUsersAsync, leaderSelector } from '../../features/user/userSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import './Leaderboard.scss';
 
 export const Leaderboard = () => {
+  const dispatch = useAppDispatch();
   const leaders = useAppSelector(leaderSelector);
   const authUser = useAppSelector(authUserSelector);
+
+  useEffect(()=> {
+    dispatch(getQuestionsAsync());
+    dispatch(getUsersAsync());
+  },[dispatch])
 
   return (
     <div className="leaderboard">
