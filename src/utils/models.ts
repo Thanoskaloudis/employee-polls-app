@@ -81,6 +81,13 @@ export type QuestionListItemProps = {
   question: QuestionWithAuthor,
 };
 
+export type QuestionStats = {
+  oneN: number,
+  oneP: number,
+  twoN: number,
+  twoP: number,
+};
+
 export type StoreQuestionAsyncArgs = { author: string, optionOneText: string, optionTwoText: string };
 
 export type StoreAnswerArgs = { userId: string, questionId: string, answer: questionOptions };

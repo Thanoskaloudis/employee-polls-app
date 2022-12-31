@@ -1,17 +1,24 @@
 import { Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { authUserSelector } from '../../features/auth/authSlice';
-import { pollSelector } from '../../features/poll/pollSlice';
-import { userSelector } from '../../features/user/userSlice';
-import { useAppSelector } from '../../store/hooks';
+import { getQuestionsAsync, pollSelector } from '../../features/poll/pollSlice';
+import { getUsersAsync, userSelector } from '../../features/user/userSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { Question, QuestionWithAuthor } from '../../utils/models';
 import { QuestionList } from '../QuestionList/QuestionList';
 import './Dashboard.scss';
 
 export const Dashboard = () => {
+  const dispatch = useAppDispatch();
   const authUser = useAppSelector(authUserSelector);
-  const answeredQuestionIds = Object.keys(authUser!.answers);
   const poll = useAppSelector(pollSelector);
   const user = useAppSelector(userSelector);
+  const answeredQuestionIds = Object.keys(authUser!.answers);
+
+  useEffect(()=> {
+    dispatch(getQuestionsAsync());
+    dispatch(getUsersAsync());
+  },[dispatch])
 
   const newQuestionFilter = (answeredQuestionIds: Array<string>) => (id: string) => !answeredQuestionIds.includes(id);
   const newQuestionIds = poll.questions.allIds.filter(newQuestionFilter(answeredQuestionIds));
@@ -36,6 +43,8 @@ export const Dashboard = () => {
         authorObject: user.users.byId[question.author],
     };
   });
+
+  console.log(newQuestionsWithAuthors, doneQuestionsWithAuthors)
   
   return (
     <div className="dashboard">
