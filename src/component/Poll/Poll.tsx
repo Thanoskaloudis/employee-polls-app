@@ -6,6 +6,7 @@ import { pollSelector, storeAnswerAsync } from '../../features/poll/pollSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getStatsForQuestion, getValueForQuestion } from '../../utils/func.helper';
 import { questionOptions, Question } from '../../utils/models';
+import { PageNotFound } from '../PageNotFound/PageNotFound';
 import './Poll.scss';
 
 export const Poll = () => {
@@ -17,6 +18,10 @@ export const Poll = () => {
   
   let {question: id}: { question?: string | null } = useParams<"question">();
   const question: Question | null = id ? poll.questions.byId[id] : null;
+
+  if(!question) {
+    return <PageNotFound />
+  }
 
   const stats = getStatsForQuestion(question!);
 

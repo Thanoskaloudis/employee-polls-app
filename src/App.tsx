@@ -10,8 +10,10 @@ import { Leaderboard } from './component/Leaderboard/Leaderboard';
 import { Dashboard } from './component/Dashboard/Dashboard';
 import { NewPoll } from './component/NewPoll/NewPoll';
 import { CircularProgress } from '@mui/material';
-import './App.scss';
 import { Poll } from './component/Poll/Poll';
+import { PageNotFound } from './component/PageNotFound/PageNotFound';
+import { Navigate } from 'react-router-dom';
+import './App.scss';
 
 function App() {
   const auth = useAppSelector(authSelector);
@@ -28,7 +30,7 @@ function App() {
   },[auth.isAuthenticated, dispatch])
 
   if (!auth.isAuthenticated) {
-    return (<Login/>);
+    return (<Login />);
   }
 
   if (!authUser && poll.status==='loading') {
@@ -59,6 +61,14 @@ function App() {
           <Route
             path="/add"
             element={<NewPoll />}
+          />
+          <Route 
+            path="/404"
+            element={<PageNotFound />} 
+          />
+          <Route  
+            path="*" 
+            element={<Navigate to="/404" replace />}
           />
         </Routes>
     </div>

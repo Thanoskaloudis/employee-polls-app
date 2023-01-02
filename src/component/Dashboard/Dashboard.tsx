@@ -53,9 +53,6 @@ export const Dashboard = () => {
   const switchHandlerDone = (event: any) => {
     setDoneVisible(event.target.checked);
   };
-
-
-  console.log(newQuestionsWithAuthors, doneQuestionsWithAuthors)
   
   return (
     <div className="dashboard">
